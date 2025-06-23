@@ -3,6 +3,10 @@ package com.example.demo_thymeleaf.repository;
 import com.example.demo_thymeleaf.entity.Student;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,31 +14,24 @@ import java.util.List;
 
 @Repository
 public class StudentRepository implements IStudentRepository {
-    private static List<Student> studentList = new ArrayList<>();
-    static {
-        studentList.add(new Student(1,"chánh1",true, "C02"));
-        studentList.add(new Student(2,"chánh1",true, "C02"));
-        studentList.add(new Student(3,"chánh1",true, "C02"));
-    }
 
+    @PersistenceContext
+    private EntityManager entityManager;
     @Override
     public List<Student> findAll() {
-        return studentList;
+        TypedQuery<Student> query = entityManager.createQuery("from Student ",Student.class);
+        return query.getResultList();
     }
 
+    @Transactional
     @Override
     public void add(Student student) {
-        studentList.add(student);
+          entityManager.persist(student);
     }
 
     @Override
     public Student findById(int id) {
-        for (int i = 0; i <studentList.size() ; i++) {
-            if (id==studentList.get(i).getId()){
-                return studentList.get(i);
-            }
-        }
-        return null;
+        return entityManager.find(Student.class,id);
     }
 
 }

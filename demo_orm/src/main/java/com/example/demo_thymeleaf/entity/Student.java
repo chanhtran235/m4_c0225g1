@@ -1,9 +1,15 @@
 package com.example.demo_thymeleaf.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "students")
 public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column
     private String name;
     private boolean gender;
     private String className;
