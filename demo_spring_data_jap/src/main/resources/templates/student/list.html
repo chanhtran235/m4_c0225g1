@@ -29,8 +29,8 @@
     <td th:text="${student.id}"></td>
     <td th:text="${student.name}"></td>
     <td th:text="${student.gender}"></td>
-    <td th:text="${student.getClassCG().getName()}"></td>
-    <td th:text="${student.getJame().getUsername()}"></td>
+    <td th:if="${student.getClassCG()}" th:text="${student.getClassCG().getName()}"></td>
+    <td th:if="${student.getJame()}" th:text="${student.getJame().getUsername()}"></td>
     <td><a th:href="@{/students/detail(id=${student.id})}">Detail1</a></td>
     <td><a th:href="@{/students/detail/__${student.id}__}">Detail1</a></td>
   </tr>
