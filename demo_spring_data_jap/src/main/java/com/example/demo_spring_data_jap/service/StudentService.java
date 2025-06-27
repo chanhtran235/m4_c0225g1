@@ -1,6 +1,7 @@
 package com.example.demo_spring_data_jap.service;
 
 import com.example.demo_spring_data_jap.entity.Student;
+import com.example.demo_spring_data_jap.exception.DuplicateAdminException;
 import com.example.demo_spring_data_jap.repository.IStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,11 @@ public class StudentService implements IStudentService{
     }
 
     @Override
-    public void add(Student student) {
+    public void add(Student student) throws DuplicateAdminException {
+        if (student.getName().equals("Admin")){
+            throw new DuplicateAdminException("Tên đang trùng với admin");
+        }
+
         studentRepository.save(student);
     }
 

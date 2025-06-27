@@ -2,6 +2,7 @@ package com.example.demo_spring_data_jap.controller;
 
 import com.example.demo_spring_data_jap.dto.StudentRequestDto;
 import com.example.demo_spring_data_jap.entity.Student;
+import com.example.demo_spring_data_jap.exception.DuplicateAdminException;
 import com.example.demo_spring_data_jap.service.IStudentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class StudentController {
         Page<Student> studentPage = studentService.search(searchName, pageable);
         model.addAttribute("searchName", searchName);
         model.addAttribute("studentPage", studentPage);
+        System.out.println("--------show list-------running-----------");
         return "student/list";
     }
 
@@ -66,15 +68,20 @@ public class StudentController {
 
     @PostMapping("/add")
     public String save(@Validated @ModelAttribute StudentRequestDto studentRequestDto, BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes) {
+                       RedirectAttributes redirectAttributes) throws DuplicateAdminException {
         Student student = new Student();
         new StudentRequestDto().validate(studentRequestDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return "student/add";
         }
+
         BeanUtils.copyProperties(studentRequestDto, student);
         studentService.add(student);
         redirectAttributes.addFlashAttribute("mess", "add success");
         return "redirect:/students";
+    }
+    @ExceptionHandler(DuplicateAdminException.class)
+    public String duplicateAdminEx(){
+        return "admin-exception";
     }
 }
