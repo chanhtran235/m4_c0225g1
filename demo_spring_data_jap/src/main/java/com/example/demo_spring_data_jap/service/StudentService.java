@@ -35,10 +35,10 @@ public class StudentService implements IStudentService{
     }
 
     @Override
-    public void add(Student student) throws DuplicateAdminException {
-        if (student.getName().equals("Admin")){
-            throw new DuplicateAdminException("Tên đang trùng với admin");
-        }
+    public void add(Student student)  {
+//        if (student.getName().equals("Admin")){
+//            throw new DuplicateAdminException("Tên đang trùng với admin");
+//        }
 
         studentRepository.save(student);
     }
